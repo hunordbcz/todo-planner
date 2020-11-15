@@ -3,5 +3,9 @@
 <body>
 <h1>Hello !</h1>
 <p>Welcome to <span th:text="${appName}">Our App</span></p>
+<c:forEach items="${books}" var="book">
+    ${book.title}
+</c:forEach>
+
 </body>
 </html>
