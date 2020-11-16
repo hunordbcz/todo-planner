@@ -1,7 +1,7 @@
 package com.se.debreczeni.controller;
 
-import com.se.debreczeni.controller.repository.UserRepository;
 import com.se.debreczeni.model.User;
+import com.se.debreczeni.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,28 +9,37 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 
 @Controller
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
     UserRepository userRepository;
 
-    @GetMapping("/signup")
-    public String showSignUpForm(User user) {
-        return "add-user";
+    @GetMapping("/")
+    public String showMain(Model model) {
+        model.addAttribute("users", userRepository.findAll());
+
+        return "users/index";
     }
 
-    @PostMapping("/adduser")
-    public String addUser(@Valid User user, BindingResult result, Model model) {
+    @GetMapping("/signup")
+    public String showSignUpForm(User user) {
+        return "users/add";
+    }
+
+    @PostMapping("/add")
+    public String addUser(@Valid User user, BindingResult result) {
         if (result.hasErrors()) {
-            return "add-user";
+            return "users/add";
         }
 
         userRepository.save(user);
-        model.addAttribute("users", userRepository.findAll());
+
         return "redirect:/index";
     }
 
@@ -40,28 +49,27 @@ public class UserController {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
 
         model.addAttribute("user", user);
-        return "update-user";
+        return "users/update";
     }
 
     @PostMapping("/update/{id}")
-    public String updateUser(@PathVariable("id") long id, @Valid User user,
-                             BindingResult result, Model model) {
+    public String updateUser(@PathVariable("id") long id, @Valid User user, BindingResult result) {
         if (result.hasErrors()) {
             user.setId(id);
-            return "update-user";
+            return "users/update";
         }
 
         userRepository.save(user);
-        model.addAttribute("users", userRepository.findAll());
+
         return "redirect:/index";
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteUser(@PathVariable("id") long id, Model model) {
+    public String deleteUser(@PathVariable("id") long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
         userRepository.delete(user);
-        model.addAttribute("users", userRepository.findAll());
-        return "index";
+
+        return "redirect:/index";
     }
 }

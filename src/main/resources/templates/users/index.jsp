@@ -15,11 +15,12 @@
             <tr th:each="user : ${users}">
                 <td th:text="${user.name}"></td>
                 <td th:text="${user.email}"></td>
-                <td><a th:href="@{/edit/{id}(id=${user.id})}">Edit</a></td>
-                <td><a th:href="@{/delete/{id}(id=${user.id})}">Delete</a></td>
+                <td><a th:href="@{/notes/{id}(id=${user.id})}">Notes</a></td>
+                <td><a th:href="@{/users/edit/{id}(id=${user.id})}">Edit</a></td>
+                <td><a th:href="@{/users/delete/{id}(id=${user.id})}">Delete</a></td>
             </tr>
             </tbody>
         </table>
     </div>
-    <p><a href="/signup">Add a new user</a></p>
+    <p><a href="/users/signup">Add a new user</a></p>
 </div>
