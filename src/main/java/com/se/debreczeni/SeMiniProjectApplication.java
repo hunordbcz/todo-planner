@@ -9,9 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan("com.se.debreczeni.model")
 @SpringBootApplication
 public class SeMiniProjectApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(SeMiniProjectApplication.class, args);
     }
-
 }
